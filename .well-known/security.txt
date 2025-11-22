@@ -1,0 +1,60 @@
+Contact: https://github.com/Hyperpolymath/jtv-playground/security/advisories/new
+Expires: 2026-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://github.com/Hyperpolymath/jtv-playground/.well-known/security.txt
+
+# Security Policy
+
+## Reporting Security Vulnerabilities
+
+If you discover a security vulnerability in this project, please report it
+responsibly:
+
+1. **DO NOT** create a public GitHub issue
+2. Use GitHub Security Advisories (link above) for private disclosure
+3. Include detailed information:
+   - Description of the vulnerability
+   - Steps to reproduce
+   - Potential impact
+   - Suggested fix (if available)
+
+## Response Timeline
+
+- **Acknowledgment**: Within 48 hours
+- **Initial Assessment**: Within 7 days
+- **Fix Timeline**: Varies by severity
+  - Critical: 48-72 hours
+  - High: 1-2 weeks
+  - Medium: 2-4 weeks
+  - Low: Best effort
+
+## Security Standards
+
+This project follows:
+
+- **Zero Trust Architecture**: Verify everything, trust nothing
+- **Offline-First**: Minimal attack surface, no external dependencies
+- **Memory Safety**: Rust/Julia/ReScript for type-safe implementations
+- **Supply Chain Security**: Reproducible builds with Nix
+- **Perimeter 3 (TPCF)**: Community sandbox, graduated trust model
+
+## Out of Scope
+
+- Issues in third-party dependencies (report to upstream)
+- Social engineering attacks
+- Physical access attacks
+- Denial of service on public demo instances
+
+## PGP Key
+
+Not currently available. Use GitHub Security Advisories for encrypted reporting.
+
+## Acknowledgments
+
+We maintain a Hall of Fame for security researchers who responsibly disclose
+vulnerabilities. See SECURITY.md for details.
+
+---
+
+This security.txt file follows RFC 9116.
+Last updated: 2025-11-22

@@ -1,0 +1,77 @@
+# AI Training and Usage Policy
+
+## Training Data Usage
+
+**Status**: ALLOWED with conditions
+
+This repository's code and documentation may be used for:
+
+✅ **Permitted Uses:**
+- Training AI/ML models for code completion and assistance
+- Educational purposes and research
+- Non-commercial AI model development
+- Improving developer tools and IDEs
+- Code analysis and security research
+
+❌ **Prohibited Uses:**
+- Training models for malicious code generation
+- Creating deepfakes or impersonation tools
+- Surveillance or tracking systems
+- Discriminatory or biased AI systems
+- Models that violate privacy or human rights
+
+## Attribution Requirements
+
+If training on this repository:
+
+1. **Cite the source**: Include repository URL and license
+2. **Preserve attribution**: Maintain contributor credits
+3. **License compliance**: Respect dual MIT + Palimpsest v0.8
+4. **Ethical use**: Follow our Code of Conduct principles
+
+## AI-Generated Code Policy
+
+This repository contains both:
+- **Human-written code**: Original author creativity and expertise
+- **AI-assisted code**: Generated with Claude Code, reviewed by humans
+
+All AI-generated code is:
+- Reviewed for correctness and security
+- Tested with 100% test coverage
+- Documented with clear attribution
+- Licensed under the same terms
+
+## Contact
+
+For AI training questions or licensing inquiries:
+- GitHub Issues: https://github.com/Hyperpolymath/jtv-playground/issues
+- Email: Contact via GitHub profile
+
+## Model Disclosure
+
+If you create an AI model using this repository's data, we request:
+
+1. **Transparency**: Disclose use of this repository in training data
+2. **Bias Testing**: Test for and mitigate potential biases
+3. **Safety**: Implement guardrails against misuse
+4. **Attribution**: Credit contributors appropriately
+
+## RSR Compliance Note
+
+This repository follows Rhodium Standard Repository (RSR) framework:
+- **Offline-first**: Minimal AI dependency for core functionality
+- **Type safety**: Prefer statically-typed languages
+- **Reversibility**: All AI suggestions can be undone
+- **Emotional safety**: AI assistance reduces contributor anxiety
+
+## Version History
+
+- v1.0 (2025-11-22): Initial ai.txt policy
+- Future updates will maintain compatibility with AI training standards
+
+---
+
+This ai.txt file follows emerging standards for AI training disclosure.
+Inspired by robots.txt and security.txt (RFC 9116).
+
+Learn more about ai.txt: https://site.spawning.ai/ai-txt

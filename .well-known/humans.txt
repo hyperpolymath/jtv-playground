@@ -1,0 +1,121 @@
+/* TEAM */
+
+Project Lead: JTV (Hyperpolymath)
+GitHub: https://github.com/Hyperpolymath
+Role: Visionary, Architect, Maintainer
+
+AI Assistant: Claude (Anthropic)
+Model: Claude Sonnet 4.5
+Role: Code generation, Documentation, Architecture assistance
+Note: All AI-generated code reviewed and tested by humans
+
+/* THANKS */
+
+Inspiration & Frameworks:
+- Rhodium Standard Repository (RSR) Framework
+- Tri-Perimeter Contribution Framework (TPCF)
+- Palimpsest License v0.8 (Chad Whitacre)
+- Offline-First movement
+- CRDT research community
+
+Technology Communities:
+- Rust, Julia, ReScript, Elixir, Haskell communities
+- ArangoDB, Podman/Containers communities
+- Svelte, Vue, Solid.js frontend communities
+- Deno runtime community
+
+/* SITE */
+
+Repository: https://github.com/Hyperpolymath/jtv-playground
+Purpose: Experimental playground for modern technology stack
+Technologies: Julia, ReScript, Deno, Svelte, ArangoDB, Podman, WASM
+Standards: RSR Bronze-level, TPCF Perimeter 3, Offline-first
+License: Dual MIT + Palimpsest v0.8
+
+Last update: 2025-11-22
+Language: English
+Doctype: Polyglot (Rust, Julia, ReScript, JavaScript, etc.)
+IDE: Claude Code, VS Code, Vim, Emacs (contributor choice)
+
+/* VALUES */
+
+🔒 Security: Zero Trust, memory safety, type safety
+🌐 Offline-First: Works air-gapped, minimal dependencies
+🧪 Reversibility: All changes can be undone
+💚 Emotional Safety: Experiment without fear
+🤝 Community: TPCF Perimeter 3 (Open sandbox)
+📊 Quality: 100% test coverage, RSR compliance
+🚀 Performance: Julia, Rust, WASM for speed
+🎨 Multi-Paradigm: Functional, OOP, Actor, Logic
+
+/* EXPERIMENTS */
+
+This repository contains experimental implementations across domains:
+
+Backend:
+- Deno + ReScript (type-safe JavaScript alternative)
+- Julia (high-performance scientific computing)
+- ArangoDB (multi-model graph database)
+
+Frontend:
+- Svelte (reactive UI framework)
+- Vue 3 (progressive framework)
+- Solid.js (fine-grained reactivity)
+
+Infrastructure:
+- Podman (rootless containers, Docker alternative)
+- Nix (reproducible builds)
+- justfile (build automation)
+
+Patterns:
+- CRDTs (offline-first distributed state)
+- Design Patterns (GoF in multiple languages)
+- Algorithms (sorting, searching, dynamic programming)
+
+/* ATTRIBUTION */
+
+Code generated with assistance from:
+- Claude Code (Anthropic AI)
+- GitHub Copilot (where applicable)
+- Stack Overflow (community wisdom)
+- Official language documentation
+
+All code is reviewed, tested, and maintained by humans.
+AI is a tool, not a replacement for human judgment.
+
+/* CONTRIBUTION */
+
+Want to contribute? See CONTRIBUTING.md
+
+Tri-Perimeter Model:
+- Perimeter 1: Core maintainers (trusted, full access)
+- Perimeter 2: Regular contributors (earned trust)
+- Perimeter 3: Community (open sandbox) ← You are here!
+
+Start with small PRs, earn trust, graduate inward.
+
+/* CONTACT */
+
+Issues: https://github.com/Hyperpolymath/jtv-playground/issues
+Discussions: https://github.com/Hyperpolymath/jtv-playground/discussions
+Security: .well-known/security.txt (RFC 9116)
+
+/* PHILOSOPHY */
+
+We believe in:
+- Software freedom (open source)
+- Developer well-being (emotional safety)
+- Technical excellence (type safety, performance)
+- Offline resilience (no cloud dependency)
+- Community governance (TPCF graduated trust)
+- Political autonomy (no corporate control)
+
+                         _
+            Made with   | |  and curiosity
+                        |_|
+
+                  ___________________
+                 |  JTV PLAYGROUND   |
+                 |  Experiment Zone  |
+                 |  RSR Compliant    |
+                 |___________________|
