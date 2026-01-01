@@ -1,21 +1,50 @@
-= Julia-the-Viper Playground
+= JTV Workbench
 :toc: macro
 :icons: font
 
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-*Playground for Julia-the-Viper - Harvard Architecture Systems Programming*
+*Controlled experimentation workbench for Julia-the-Viper language development*
 
 image:https://img.shields.io/badge/Language-JTV-red[JTV]
 image:https://img.shields.io/badge/License-AGPL--3.0-blue[License]
+image:https://img.shields.io/badge/Status-f0-green[f0]
 
 toc::[]
 
 == Overview
 
+This is the **only area that may grow** in the jtv-playground repository (per ANCHOR scope policy).
+
 Julia-the-Viper (JTV) is a systems programming language designed for Harvard architecture processors where code and data live in separate memory spaces.
 
-=== Key Features
+== Directory Structure
+
+----
+jtv/
+├── parser/      # Lexer and parser experiments
+├── samples/     # JTV code samples
+├── spec/        # Language specification drafts
+├── tests/       # Test corpus and conformance tests
+│   └── corpus/
+│       ├── valid/     # Valid JTV programs (>=3)
+│       └── invalid/   # Invalid programs (>=2)
+├── repl/        # REPL prototype
+└── tools/       # Development tools
+----
+
+== Golden Path
+
+All operations are routed through `just`:
+
+[source,bash]
+----
+just --list    # Show available recipes
+just test      # Run test corpus (offline)
+just demo      # Run JTV demonstration (offline)
+----
+
+== Key Features
 
 * **Harvard Architecture Native**: Separate code/data address spaces
 * **Flash-Optimized**: Efficient code storage in flash memory
@@ -23,9 +52,7 @@ Julia-the-Viper (JTV) is a systems programming language designed for Harvard arc
 * **Embedded Focus**: AVR, PIC, ARM Cortex-M
 * **Zero Runtime**: No hidden allocations
 
-== Language Design
-
-=== Memory Spaces
+== Memory Space Annotations
 
 [source,jtv]
 ----
@@ -35,28 +62,11 @@ const LOOKUP_TABLE: [u8; 256] @code = [...]
 -- Data space (RAM)
 let mut buffer: [u8; 64] @data
 
--- Access code space explicitly
-fn read_table(idx: u8) -> u8:
-    pgm_read(LOOKUP_TABLE[idx])
+-- I/O space (registers)
+const PORT_B: *mut u8 @io = 0x25
 ----
 
-=== Embedded Primitives
-
-[source,jtv]
-----
--- Direct register access
-fn setup_uart() -> ():
-    UBRR0H = 0x00
-    UBRR0L = 103  -- 9600 baud @ 16MHz
-    UCSR0B = (1 << TXEN0) | (1 << RXEN0)
-
--- Interrupt handlers
-#[interrupt(TIMER0_OVF)]
-fn timer_overflow() -> ():
-    tick_count += 1
-----
-
-=== Resource Constraints
+== Resource Constraints
 
 [source,jtv]
 ----
@@ -71,40 +81,26 @@ module Firmware:
     -- All memory statically allocated
 ----
 
-== Getting Started
+== Test Corpus
 
-=== Prerequisites
+The test corpus in `tests/corpus/` contains:
 
-* AVR-GCC or ARM toolchain
-* JTV compiler
+* **Valid samples** (>=3): Programs that should parse correctly
+* **Invalid samples** (>=2): Programs with expected errors
 
-=== Installation
+Run the validator:
 
 [source,bash]
 ----
-guix install julia-the-viper
+just test
 ----
 
-=== Hello World (AVR)
+== Scope Policy
 
-[source,jtv]
-----
-module Main
+Per the ANCHOR directive:
 
-import AVR.UART (init, print)
-
-fn main() -> !:
-    init(9600)
-    loop:
-        print("Hello from JTV!")
-        delay_ms(1000)
-----
-
-== Examples
-
-* `avr-blink/` - LED blink for AVR
-* `arm-cortex/` - ARM Cortex-M examples
-* `bootloader/` - Custom bootloader
+* **Allowed**: JTV language experiments, parser/AST work, REPL, conformance tests
+* **Forbidden**: Non-JTV experiments, new frameworks, network dependencies
 
 == License
 

@@ -1,430 +1,180 @@
-# justfile - Build automation for JTV Playground
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# justfile - JTV Playground Build Automation
 # https://github.com/casey/just
 #
-# Install just: cargo install just
-# Usage: just <recipe>
-# List recipes: just --list
+# This is the SINGLE command interface for all operations.
+# Per ANCHOR scope policy: all user-visible operations must be `just` recipes.
 
-# Default recipe (run when just is called without arguments)
+# Default recipe: show available commands
 default:
     @just --list
 
-# Show this help message
+# ==============================================================================
+# GOLDEN PATH (f0 milestone)
+# ==============================================================================
+
+# Run JTV test corpus (offline, >=5 samples: 3 valid, 2 invalid)
+test:
+    @echo "Running JTV test corpus..."
+    @./jtv/tools/validate.sh
+
+# Run JTV language demonstration (offline)
+demo:
+    @./jtv/tools/demo.sh
+
+# Show help and available recipes
 help:
-    @echo "JTV Playground Build Automation"
-    @echo "================================"
+    @echo "JTV Playground - Julia-the-Viper Workbench"
+    @echo "==========================================="
     @echo ""
-    @echo "Available recipes:"
+    @echo "Golden Path (f0):"
+    @echo "  just test     Run offline test suite (>=5 samples)"
+    @echo "  just demo     Run offline JTV demonstration"
+    @echo ""
+    @echo "All recipes:"
     @just --list
+
+# ==============================================================================
+# CODE QUALITY
+# ==============================================================================
+
+# Lint all code
+lint:
+    @echo "Linting JTV code..."
+    @echo "(f0: basic syntax validation)"
+    @./jtv/tools/validate.sh
+
+# Format code
+fmt:
+    @echo "Formatting code..."
+    @echo "(f0: no auto-formatter yet)"
+
+# ==============================================================================
+# JTV WORKBENCH
+# ==============================================================================
+
+# Validate JTV sample corpus
+jtv-validate:
+    @./jtv/tools/validate.sh
+
+# Show JTV samples
+jtv-samples:
+    @echo "JTV Sample Files:"
     @echo ""
-    @echo "Examples:"
-    @echo "  just build          # Build all projects"
-    @echo "  just test           # Run all tests"
-    @echo "  just fmt            # Format all code"
-    @echo "  just clean          # Clean build artifacts"
-    @echo "  just rsr-check      # Verify RSR compliance"
+    @find jtv/samples -name "*.jtv" -exec echo "  {}" \;
+
+# Count JTV test corpus
+jtv-corpus-stats:
+    @echo "JTV Test Corpus Statistics:"
+    @echo ""
+    @echo "Valid samples:   $(find jtv/tests/corpus/valid -name '*.jtv' | wc -l)"
+    @echo "Invalid samples: $(find jtv/tests/corpus/invalid -name '*.jtv' | wc -l)"
+    @echo "Edge cases:      $(find jtv/tests/corpus/edge-cases -name '*.jtv' 2>/dev/null | wc -l)"
 
 # ==============================================================================
-# Build Recipes
+# BUILD (f1+ milestone)
 # ==============================================================================
 
-# Build all projects
-build: build-julia build-deno build-algorithms
-    @echo "✅ All projects built successfully!"
-
-# Build Julia projects
-build-julia:
-    @echo "🔬 Building Julia projects..."
-    cd experiments/julia-demos/data-pipeline && julia --project=. -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
-
-# Build Deno/ReScript projects
-build-deno:
-    @echo "🦕 Building Deno projects..."
-    # cd experiments/deno-api && deno cache src/main.ts
-
-# Build algorithm demonstrations (no build needed for pure code)
-build-algorithms:
-    @echo "🧮 Algorithms ready (no build needed)"
+# Build JTV tools (future)
+build:
+    @echo "Build not yet implemented (f1 milestone)"
+    @echo "Current status: f0 (scope control pass)"
 
 # Clean build artifacts
 clean:
-    @echo "🧹 Cleaning build artifacts..."
-    find . -type d -name "node_modules" -exec rm -rf {} + 2>/dev/null || true
-    find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
-    find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
-    find . -type d -name "coverage" -exec rm -rf {} + 2>/dev/null || true
-    find . -type f -name "*.pyc" -delete 2>/dev/null || true
-    find . -type f -name ".DS_Store" -delete 2>/dev/null || true
-    @echo "✅ Clean complete"
+    @echo "Cleaning build artifacts..."
+    @find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+    @find . -type d -name "node_modules" -exec rm -rf {} + 2>/dev/null || true
+    @find . -type f -name "*.pyc" -delete 2>/dev/null || true
+    @echo "Clean complete"
 
 # ==============================================================================
-# Test Recipes
+# LEGACY (QUARANTINED - per ANCHOR scope policy)
 # ==============================================================================
 
-# Run all tests
-test: test-julia test-algorithms test-validation
-    @echo "✅ All tests passed!"
-
-# Test Julia code
-test-julia:
-    @echo "🔬 Testing Julia..."
-    cd experiments/julia-demos/data-pipeline && julia --project=. -e 'using Pkg; Pkg.test()'
-
-# Test algorithms
-test-algorithms:
-    @echo "🧮 Testing algorithms..."
-    cd experiments/algorithms && python3 sorting.py
-    cd experiments/algorithms && python3 searching.py
-    cd experiments/algorithms && python3 dynamic_programming.py
-
-# Test validation library
-test-validation:
-    @echo "✅ Testing form validation..."
-    # cd experiments/utilities/form-validation && deno test validator.test.js
-
-# Test coverage (future)
-test-coverage:
-    @echo "📊 Generating test coverage report..."
-    @echo "⚠️  Coverage reporting not yet configured"
-
-# ==============================================================================
-# Code Quality Recipes
-# ==============================================================================
-
-# Format all code
-fmt: fmt-julia fmt-js
-    @echo "✨ All code formatted!"
-
-# Format Julia code
-fmt-julia:
-    @echo "🔬 Formatting Julia..."
-    find experiments/julia-demos -name "*.jl" -exec julia -e 'using JuliaFormatter; format("{}")' \;
-
-# Format JavaScript/TypeScript
-fmt-js:
-    @echo "📝 Formatting JavaScript..."
-    find experiments -name "*.js" -exec deno fmt {} \; 2>/dev/null || true
-    find src -name "*.js" -exec deno fmt {} \; 2>/dev/null || true
-
-# Lint all code
-lint: lint-julia lint-js
-    @echo "✅ All linting passed!"
-
-# Lint Julia code
-lint-julia:
-    @echo "🔬 Linting Julia..."
-    # Julia doesn't have a standard linter, but we can use Pkg.test()
-    @echo "✓ Julia code checked"
-
-# Lint JavaScript
-lint-js:
-    @echo "📝 Linting JavaScript..."
-    find experiments -name "*.js" -exec deno lint {} \; 2>/dev/null || true
-
-# ==============================================================================
-# Documentation Recipes
-# ==============================================================================
-
-# Generate documentation
-docs:
-    @echo "📚 Generating documentation..."
-    @echo "⚠️  Documentation generation not yet configured"
-    @echo "Current docs are handwritten in each experiment's README.md"
-
-# Serve documentation locally
-docs-serve:
-    @echo "📖 Serving documentation..."
-    @echo "⚠️  Documentation server not yet configured"
-
-# Check documentation links
-docs-check:
-    @echo "🔗 Checking documentation links..."
-    @echo "⚠️  Link checker not yet configured"
-
-# ==============================================================================
-# RSR Compliance Recipes
-# ==============================================================================
-
-# Check RSR (Rhodium Standard Repository) compliance
-rsr-check: rsr-docs rsr-well-known rsr-license rsr-tests
+# Run legacy algorithm demos (frozen, no expansion)
+_legacy-algorithms:
+    @echo "WARNING: Legacy code (frozen per ANCHOR scope policy)"
     @echo ""
-    @echo "================================"
-    @echo "RSR Compliance Summary"
-    @echo "================================"
-    @just rsr-report
+    @cd experiments/_attic/algorithms && python3 sorting.py 2>/dev/null || echo "(algorithms not available)"
 
-# Check required documentation files
-rsr-docs:
-    @echo "📋 Checking required documentation..."
-    @test -f README.md || (echo "❌ Missing README.md" && exit 1)
-    @test -f LICENSE.txt || (echo "❌ Missing LICENSE.txt" && exit 1)
-    @test -f SECURITY.md || (echo "❌ Missing SECURITY.md" && exit 1)
-    @test -f CONTRIBUTING.md || (echo "❌ Missing CONTRIBUTING.md" && exit 1)
-    @test -f CODE_OF_CONDUCT.md || (echo "❌ Missing CODE_OF_CONDUCT.md" && exit 1)
-    @test -f MAINTAINERS.md || (echo "❌ Missing MAINTAINERS.md" && exit 1)
-    @test -f CHANGELOG.md || (echo "❌ Missing CHANGELOG.md" && exit 1)
-    @echo "✅ All documentation files present"
-
-# Check .well-known directory
-rsr-well-known:
-    @echo "🔍 Checking .well-known directory..."
-    @test -f .well-known/security.txt || (echo "❌ Missing .well-known/security.txt" && exit 1)
-    @test -f .well-known/ai.txt || (echo "❌ Missing .well-known/ai.txt" && exit 1)
-    @test -f .well-known/humans.txt || (echo "❌ Missing .well-known/humans.txt" && exit 1)
-    @echo "✅ .well-known directory complete"
-
-# Check license compliance
-rsr-license:
-    @echo "⚖️  Checking license..."
-    @grep -q "MIT License" LICENSE.txt || (echo "❌ Missing MIT License" && exit 1)
-    @grep -q "Palimpsest" LICENSE.txt || (echo "❌ Missing Palimpsest License" && exit 1)
-    @echo "✅ Dual license present (MIT + Palimpsest v0.8)"
-
-# Check test coverage (simplified)
-rsr-tests:
-    @echo "🧪 Checking test coverage..."
-    @test -f experiments/algorithms/sorting.py || (echo "⚠️  Some tests may be missing" && exit 0)
-    @echo "⚠️  Full test coverage verification not yet automated"
-    @echo "   Manual check: just test"
-
-# Generate RSR compliance report
-rsr-report:
-    @echo "📊 RSR Bronze-Level Compliance Report"
+# List legacy experiments (frozen)
+_legacy-list:
+    @echo "Legacy Experiments (frozen in _attic/):"
     @echo ""
-    @echo "✅ Documentation complete"
-    @echo "✅ .well-known directory present"
-    @echo "✅ Dual licensing (MIT + Palimpsest)"
-    @echo "✅ Build system (this justfile)"
-    @echo "⚠️  Test coverage: Manual verification needed"
-    @echo "⚠️  Offline-first: Partial (varies by experiment)"
-    @echo "⚠️  Type safety: Partial (migrating to typed languages)"
-    @echo "⚠️  Zero dependencies: Partial (varies by experiment)"
+    @find experiments/_attic -maxdepth 2 -name "README.md" -exec dirname {} \; 2>/dev/null || echo "  (none)"
+
+# ==============================================================================
+# REPOSITORY MANAGEMENT
+# ==============================================================================
+
+# Show project status
+status:
+    @echo "JTV Playground Status"
+    @echo "====================="
     @echo ""
-    @echo "Overall: ~70% Bronze-Level Compliant"
-    @echo "Target: 100% by v1.0.0"
-
-# ==============================================================================
-# Container Recipes (Podman)
-# ==============================================================================
-
-# Build all containers
-containers-build:
-    @echo "📦 Building containers with Podman..."
-    cd infrastructure/podman && bash scripts/build.sh
-
-# Run containers
-containers-up:
-    @echo "🚀 Starting containers..."
-    @echo "⚠️  Container orchestration not yet configured"
-    @echo "   See infrastructure/podman/README.md"
-
-# Stop containers
-containers-down:
-    @echo "🛑 Stopping containers..."
-    @echo "⚠️  Container orchestration not yet configured"
-
-# Clean containers
-containers-clean:
-    @echo "🧹 Cleaning containers..."
-    podman system prune -f
-
-# ==============================================================================
-# Database Recipes (ArangoDB)
-# ==============================================================================
-
-# Start ArangoDB locally
-db-start:
-    @echo "🗄️  Starting ArangoDB..."
-    podman run -d --name arangodb -p 8529:8529 -e ARANGO_ROOT_PASSWORD=rootpassword docker.io/arangodb/arangodb:latest
-
-# Stop ArangoDB
-db-stop:
-    @echo "🛑 Stopping ArangoDB..."
-    podman stop arangodb
-    podman rm arangodb
-
-# Run ArangoDB demo queries
-db-demo:
-    @echo "🔍 Running ArangoDB demo..."
-    cd experiments/database-demos/arangodb-demo && deno run --allow-net queries.js
-
-# ==============================================================================
-# Development Recipes
-# ==============================================================================
-
-# Watch for changes and rebuild (future)
-watch:
-    @echo "👀 Watch mode not yet implemented"
-    @echo "   Consider using: watchexec --exts jl,js just test"
-
-# Run development server (future)
-dev:
-    @echo "🚀 Starting development servers..."
-    @echo "⚠️  Dev server not yet configured"
-
-# Create new experiment from template (future)
-new-experiment name:
-    @echo "📝 Creating new experiment: {{name}}"
-    @echo "⚠️  Template system not yet implemented"
-
-# ==============================================================================
-# Release Recipes
-# ==============================================================================
-
-# Prepare release (for maintainers)
-release version:
-    @echo "🎉 Preparing release {{version}}"
-    @echo "1. Update CHANGELOG.md"
-    @echo "2. Update version numbers"
-    @echo "3. Run tests: just test"
-    @echo "4. Build: just build"
-    @echo "5. Tag: git tag v{{version}}"
-    @echo "6. Push: git push --tags"
+    @echo "Milestone: f0 (scope control)"
+    @echo "Branch:    $(git branch --show-current)"
+    @echo "Modified:  $(git status --porcelain | wc -l) file(s)"
     @echo ""
-    @echo "⚠️  Automated release process not yet implemented"
+    @just jtv-corpus-stats
 
-# Verify release readiness
-release-check:
-    @echo "✔️  Verifying release readiness..."
-    @just test
-    @just rsr-check
-    @echo "✅ Ready for release!"
-
-# ==============================================================================
-# Utility Recipes
-# ==============================================================================
-
-# Count lines of code
-loc:
-    @echo "📏 Lines of Code:"
+# Verify golden path (smoke test)
+verify:
+    @echo "Verifying golden path..."
     @echo ""
-    @echo "Julia:"
-    @find experiments/julia-demos -name "*.jl" -exec wc -l {} \; | awk '{total+=$1} END {print total " lines"}'
+    @echo "1. just --list"
+    @just --list >/dev/null && echo "   PASS" || echo "   FAIL"
     @echo ""
-    @echo "JavaScript:"
-    @find experiments src -name "*.js" -exec wc -l {} \; | awk '{total+=$1} END {print total " lines"}'
+    @echo "2. just test"
+    @just test >/dev/null 2>&1 && echo "   PASS" || echo "   FAIL"
     @echo ""
-    @echo "Python (legacy):"
-    @find experiments -name "*.py" -exec wc -l {} \; | awk '{total+=$1} END {print total " lines"}'
+    @echo "3. just demo"
+    @just demo >/dev/null 2>&1 && echo "   PASS" || echo "   FAIL"
     @echo ""
-    @echo "Total:"
-    @find experiments src -name "*.jl" -o -name "*.js" -o -name "*.py" | xargs wc -l | tail -1
+    @echo "Golden path verification complete"
 
-# Show project statistics
-stats:
-    @echo "📊 Project Statistics"
-    @echo "===================="
+# Show ANCHOR scope policy
+scope:
+    @echo "ANCHOR Scope Policy"
+    @echo "==================="
     @echo ""
-    @echo "Commits:    $(git rev-list --count HEAD)"
-    @echo "Branches:   $(git branch -a | wc -l)"
-    @echo "Contributors: $(git log --format='%an' | sort -u | wc -l)"
+    @echo "CORE ALLOWED:"
+    @echo "  - JTV language experiments"
+    @echo "  - Parser/AST/type experiments for JTV"
+    @echo "  - REPL / playground UI"
+    @echo "  - Conformance tests and corpora"
     @echo ""
-    @just loc
-
-# List all experiments
-list-experiments:
-    @echo "🧪 Available Experiments:"
+    @echo "LEGACY QUARANTINE:"
+    @echo "  - All non-JTV experiments in experiments/_attic/"
+    @echo "  - No expansion allowed"
     @echo ""
-    @find experiments -maxdepth 2 -name "README.md" -exec dirname {} \; | sort
-
-# Validate all JSON files
-validate-json:
-    @echo "🔍 Validating JSON files..."
-    @find . -name "*.json" -exec sh -c 'python3 -m json.tool {} > /dev/null && echo "✅ {}" || echo "❌ {}"' \;
-
-# ==============================================================================
-# CI/CD Integration
-# ==============================================================================
-
-# Run CI pipeline locally
-ci:
-    @echo "🔄 Running CI pipeline..."
-    @just fmt
-    @just lint
-    @just build
-    @just test
-    @just rsr-check
-    @echo "✅ CI pipeline complete!"
-
-# Pre-commit hook
-pre-commit:
-    @echo "🪝 Running pre-commit checks..."
-    @just fmt
-    @just lint
-    @echo "✅ Pre-commit checks passed!"
-
-# ==============================================================================
-# Nix Integration (Future)
-# ==============================================================================
-
-# Build with Nix (reproducible builds)
-nix-build:
-    @echo "❄️  Building with Nix..."
-    @echo "⚠️  Nix flake not yet configured"
-    # nix build
-
-# Enter Nix development shell
-nix-shell:
-    @echo "❄️  Entering Nix shell..."
-    @echo "⚠️  Nix flake not yet configured"
-    # nix develop
-
-# ==============================================================================
-# Installation & Setup
-# ==============================================================================
-
-# Install project dependencies
-install:
-    @echo "📦 Installing dependencies..."
-    @echo "Julia..."
-    @cd experiments/julia-demos/data-pipeline && julia --project=. -e 'using Pkg; Pkg.instantiate()'
-    @echo "✅ Dependencies installed!"
-
-# Setup development environment
-setup:
-    @echo "🛠️  Setting up development environment..."
-    @just install
-    @echo "✅ Setup complete!"
+    @echo "FORBIDDEN:"
+    @echo "  - General polyglot experiments"
+    @echo "  - New frameworks not required for JTV"
+    @echo "  - Network-required execution paths"
     @echo ""
-    @echo "Next steps:"
-    @echo "  just build  # Build all projects"
-    @echo "  just test   # Run tests"
-    @echo "  just help   # See all commands"
-
-# ==============================================================================
-# Version Information
-# ==============================================================================
+    @echo "See: .machine_read/ANCHOR.scope-arrest.2026-01-01.scm"
 
 # Show version information
 version:
-    @echo "JTV Playground v0.1.0"
+    @echo "JTV Playground v0.1.0-f0"
     @echo ""
-    @echo "Components:"
-    @echo "  Julia:     $(julia --version)"
-    @echo "  Deno:      $(deno --version | head -1)"
-    @echo "  Podman:    $(podman --version)"
-    @echo "  just:      $(just --version)"
-    @echo ""
-    @echo "RSR Compliance: ~70% Bronze Level"
+    @echo "Milestone: f0 (scope control)"
+    @echo "Focus:     Julia-the-Viper language workbench"
 
-# Show environment information
-env:
-    @echo "🌍 Environment Information"
-    @echo "========================="
-    @echo ""
-    @echo "OS:        $(uname -s)"
-    @echo "Arch:      $(uname -m)"
-    @echo "Shell:     $SHELL"
-    @echo "PWD:       $(pwd)"
-    @echo "Git Branch: $(git branch --show-current)"
-    @echo "Git Status: $(git status --porcelain | wc -l) file(s) modified"
+# ==============================================================================
+# CI/CD INTEGRATION
+# ==============================================================================
 
-# Dump configuration (for debugging)
-dump:
-    @echo "🔧 Configuration Dump"
-    @echo "===================="
-    @just env
-    @echo ""
-    @just version
-    @echo ""
-    @just stats
+# Run CI pipeline (for automation)
+ci:
+    @echo "Running CI pipeline..."
+    @just test
+    @just lint
+    @echo "CI pipeline complete"
+
+# Pre-commit hook target
+pre-commit:
+    @just test
+    @just lint

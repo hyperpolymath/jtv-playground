@@ -1,122 +1,150 @@
 = JTV Playground
+:toc: macro
+:icons: font
 
-image:https://img.shields.io/badge/license-AGPL--3.0-blue.svg[AGPL-3.0,link="https://www.gnu.org/licenses/agpl-3.0"] image:https://img.shields.io/badge/philosophy-Palimpsest-purple.svg[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-licence"]
+// SPDX-License-Identifier: AGPL-3.0-or-later
 
-A comprehensive development playground for experimenting with various technologies, frameworks, and architectural patterns.
+*Controlled experimentation workbench for Julia-the-Viper (JTV) language development*
 
-== Project Structure
+image:https://img.shields.io/badge/Language-JTV-red[JTV]
+image:https://img.shields.io/badge/license-AGPL--3.0-blue.svg[AGPL-3.0,link="https://www.gnu.org/licenses/agpl-3.0"]
+image:https://img.shields.io/badge/Milestone-f0-green[f0]
 
-```
+toc::[]
+
+== Overview
+
+This repository is a **controlled playground** for JTV (Julia-the-Viper) language development. Per the ANCHOR scope policy, all activities are scoped exclusively to JTV language, tooling, and UX experiments.
+
+=== What is JTV?
+
+Julia-the-Viper is a systems programming language designed for Harvard architecture embedded systems where code and data live in separate memory spaces.
+
+Key features:
+
+* **Harvard Architecture Native**: Separate code/data address spaces
+* **Flash-Optimized**: Efficient code storage in flash memory
+* **RAM Conservation**: Minimize RAM usage for data
+* **Embedded Focus**: AVR, PIC, ARM Cortex-M
+* **Zero Runtime**: No hidden allocations
+
+== Quick Start
+
+All operations are routed through `just`:
+
+[source,bash]
+----
+just --list    # Show available commands
+just test      # Run test corpus (offline)
+just demo      # Run JTV demonstration (offline)
+----
+
+== Repository Structure
+
+[source]
+----
 jtv-playground/
-├── experiments/           # Individual experiments and demos
-│   ├── api-demos/        # REST, GraphQL, WebSocket APIs
-│   ├── python-demos/     # Python utilities and demos
-│   ├── frontend-demos/   # React, Vue, vanilla JS demos
-│   ├── database-demos/   # Database experiments
-│   ├── microservices/    # Microservices architecture
-│   ├── testing/          # Testing frameworks and examples
-│   ├── infrastructure/   # Docker, CI/CD, deployment
-│   ├── algorithms/       # Algorithm implementations
-│   ├── design-patterns/  # Design pattern examples
-│   └── utilities/        # Utility tools and scripts
-├── docs/                 # Documentation
-├── scripts/              # Build and utility scripts
-├── src/                  # Main source code
-│   ├── backend/          # Backend implementations
-│   ├── frontend/         # Frontend implementations
-│   └── shared/           # Shared utilities
-└── CLAUDE.md            # AI assistant guidelines
+├── jtv/                    # JTV Workbench (active development)
+│   ├── parser/             # Lexer and parser experiments
+│   ├── samples/            # JTV code samples
+│   ├── spec/               # Language specification
+│   ├── tests/corpus/       # Test corpus (valid/invalid)
+│   ├── repl/               # REPL prototype
+│   └── tools/              # Development tools
+├── experiments/_attic/     # Legacy experiments (frozen)
+├── .machine_read/          # Control plane files
+├── justfile                # Command interface
+└── Mustfile                # Mandatory checks
+----
 
-```
+== Scope Policy
 
-== Experiments
+Per `.machine_read/ANCHOR.scope-arrest.2026-01-01.scm`:
 
-=== API Demos
-- REST API with Express.js
-- GraphQL server
-- WebSocket real-time communication
-- Authentication systems (JWT, sessions)
-- API rate limiting and caching
+=== Allowed
 
-=== Python Demos
-- Data processing pipelines
-- CLI tools
-- Web scraping utilities
-- Automation scripts
+* JTV language experiments
+* Parser/AST/type experiments supporting JTV
+* REPL / playground UI
+* Conformance harnesses and corpora
+* Benchmark harnesses relevant to JTV
 
-=== Frontend Demos
-- React applications
-- State management patterns
-- Custom hooks library
-- CSS frameworks and component libraries
-- Data visualization dashboards
+=== Legacy (Frozen)
 
-=== Database Demos
-- SQLite experiments
-- Migration systems
-- ORM patterns
+* All non-JTV experiments are in `experiments/_attic/`
+* No new features or expansion permitted
 
-=== Infrastructure
-- Docker containerization
-- CI/CD pipelines
-- Logging and monitoring
-- Serverless functions
+=== Forbidden
 
-=== Testing
-- Unit testing (Jest, pytest)
-- Integration testing
-- E2E testing (Playwright, Cypress)
-- Performance benchmarking
+* General polyglot experiments
+* New frameworks not required for JTV
+* Network-required execution paths for demos/tests
 
-=== Algorithms & Patterns
-- Classic algorithms (sorting, searching, DP)
-- Design patterns implementation
-- Data structures
+== Golden Path
 
-== Getting Started
+The f0 milestone success criteria:
 
-Each experiment has its own README with specific setup instructions.
+[source,bash]
+----
+just --list   # Shows available recipes
+just test     # Runs offline, validates >=5 samples (3 valid, 2 invalid)
+just demo     # Runs offline, demonstrates JTV feature
+----
 
-=== Prerequisites
+== Language Policy
 
-- Node.js 18+
-- Python 3.9+
-- Docker (optional)
+[cols="1,1,2"]
+|===
+| Category | Languages | Notes
 
-=== Quick Start
+| Primary
+| Julia, ReScript, Scheme, Shell, Just, Nickel
+| For all new code
 
-```bash
-= Clone the repository
+| Allowed
+| Rust
+| For tooling/WASM only
 
-image:https://img.shields.io/badge/license-AGPL--3.0-blue.svg[AGPL-3.0,link="https://www.gnu.org/licenses/agpl-3.0"] image:https://img.shields.io/badge/philosophy-Palimpsest-purple.svg[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-licence"]
-git clone <repository-url>
-cd jtv-playground
+| Quarantined
+| Python, Node/npm
+| Legacy only, no expansion
 
-= Choose an experiment
+| Forbidden
+| TypeScript (source), Makefiles
+| Use alternatives
+|===
 
-image:https://img.shields.io/badge/license-AGPL--3.0-blue.svg[AGPL-3.0,link="https://www.gnu.org/licenses/agpl-3.0"] image:https://img.shields.io/badge/philosophy-Palimpsest-purple.svg[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-licence"]
-cd experiments/<experiment-name>
+== Command Routing
 
-= Follow the experiment's README
+All operations must go through:
 
-image:https://img.shields.io/badge/license-AGPL--3.0-blue.svg[AGPL-3.0,link="https://www.gnu.org/licenses/agpl-3.0"] image:https://img.shields.io/badge/philosophy-Palimpsest-purple.svg[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-licence"]
-```
+* `just <recipe>` - User-visible operations
+* `must` - Deployment/physical-state transitions (Mustfile)
+
+Do not run ad-hoc commands. If a recipe doesn't exist, add it to the justfile first.
 
 == Contributing
 
-This is a playground repository. Feel free to:
-- Add new experiments
-- Improve existing code
-- Document learnings
-- Suggest new directions
+This is a controlled workbench. Before contributing:
 
-See CLAUDE.md for AI assistant guidelines.
+1. Read `.machine_read/ANCHOR.scope-arrest.2026-01-01.scm`
+2. Ensure your contribution relates to JTV language/tooling
+3. All new code goes in `jtv/` directory
+4. Route all operations through `just` recipes
+
+See link:CONTRIBUTING.md[CONTRIBUTING.md] for guidelines.
 
 == License
 
-MIT License - This is an experimental playground project.
+SPDX-License-Identifier: AGPL-3.0-or-later
+
+== See Also
+
+* link:jtv/README.adoc[JTV Workbench Documentation]
+* link:jtv/spec/SYNTAX.adoc[JTV Language Syntax (Draft)]
+* link:.machine_read/ANCHOR.scope-arrest.2026-01-01.scm[ANCHOR Scope Policy]
 
 ---
 
-*Status*: Active Development
-*Last Updated*: 2025-11-21
+*Milestone*: f0 (scope control)
+*Last Updated*: 2026-01-01
